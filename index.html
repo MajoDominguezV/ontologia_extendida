@@ -186,16 +186,16 @@ function goTo(i){stack=stack.slice(0,i+1);render();scrollTo(0,0)}
 function tCand(e,uid){e.stopPropagation();e.currentTarget.classList.toggle('open');document.getElementById(uid).classList.toggle('open')}
 document.getElementById('searchInput').addEventListener('input',function(){sq=this.value.trim();render()});
 
-fetch('ontologia.json')
-  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
-  .then(data=>{
-    Object.entries(data).forEach(([id,c])=>{c.id=id});
-    C=data;
+fetch('ontologia.ttl')
+  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+  .then(ttlText=>{
+    const data = parseTTL(ttlText);
+    C = data;
     render();
   })
   .catch(err=>{
-    document.getElementById('app').innerHTML=`<div class="empty"><h3>Error cargando la ontología</h3><p>Asegúrate de que <code>ontologia.json</code> está en la misma carpeta. Error: ${err.message}</p></div>`;
+    document.getElementById('app').innerHTML=`<div class="empty"><h3>Error cargando la ontología</h3><p>Asegúrate de que <code>ontologia.ttl</code> está en la misma carpeta. Error: ${err.message}</p></div>`;
   });
-</script>
+ </script>
 </body>
 </html>
